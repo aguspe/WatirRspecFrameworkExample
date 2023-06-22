@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+require 'yaml'
+require 'selenium-webdriver'
+require 'watir'
+require 'webdrivers'
+
+module BrowserHelper
+
+  def browser(*args)
+    @browser ||= create_browser(*args)
+  end
+
+  private
+
+  def create_browser(*args)
+    @config = YAML.load_file('config/config.yml')
+    browser = @config['browser'].to_sym
+    args = args.empty? ? @config['browser_options'] : args
+    @browser = Watir::Browser.new(browser, options: { args: args })
+  end
+end
